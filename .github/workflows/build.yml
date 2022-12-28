@@ -1,0 +1,72 @@
+name: dokla
+on:
+  push:
+    tags:
+      - v*
+    branches:
+      - master
+      - main
+  pull_request:
+  release:
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    env:
+      SERVICE: "dokla"
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+        with:
+          go-version: 1.18
+
+      - name: Extract Tag
+        id: extract_tag
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          TAG=${{ github.event.release.tag_name }}
+          tag=BR_${GITHUB_ACTOR}_${GITHUB_REF##*/}
+          if [ -z "$GITHUB_HEAD_REF" ]; then
+              if [ "${GITHUB_REF#refs/heads/}" == "main" ]; then
+                  tag=latest
+              fi
+              if [ -n "$TAG" ]; then
+                  tag=$TAG
+              fi
+          else
+              tag="PR_${GITHUB_ACTOR}_${GITHUB_HEAD_REF}";
+          fi
+          echo ::set-output name=BUILD_TAG::$(echo $tag)
+
+      - name: go ensure
+        id: go_ensure
+        run: go mod tidy
+
+      - name: go build
+        id: go_build
+        env:
+          TAG: ${{ steps.extract_tag.outputs.BUILD_TAG }}
+          GOOS: linux
+          GOARCH: amd64
+        run: |
+          mod_name=`head -1 go.mod | cut -d' ' -f2`
+          go build -o dokla.bin $mod_name/cmd/dokla
+      - name: docker login
+        env:
+          DOCKER_USER: ${{secrets.DOCKER_USER}}
+          DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+        run: |
+          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+      - name: docker_build
+        id: docker_build
+        env:
+          TAG: ${{ steps.extract_tag.outputs.BUILD_TAG }}
+        run: |
+          docker build -t ${{secrets.DOCKER_USER}}/$SERVICE:$TAG .
+
+      - name: Push Docker image To docker hub
+        id: image-push
+        env:
+          TAG: ${{ steps.extract_tag.outputs.BUILD_TAG }}
+        run: |
+          docker push ${{secrets.DOCKER_USER}}/$SERVICE:$TAG
