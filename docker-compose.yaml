@@ -1,0 +1,89 @@
+version: '3.7'
+
+services:
+  dokla:
+    image: nchukka/dokla:latest
+    restart: always
+    depends_on:
+      - mongodb-sharded
+      - mongodb-shard0-p
+      - mongodb-shard0-s
+      - mongodb-cfg-p
+      - mongodb-cfg-s
+    ports:
+      - "9090:9090"
+    networks:
+      - local-dev
+  mongodb-sharded:
+    image: docker.io/bitnami/mongodb-sharded:5.0
+    environment:
+      - MONGODB_ADVERTISED_HOSTNAME=mongodb-sharded
+      - MONGODB_SHARDING_MODE=mongos
+      - MONGODB_ROOT_PASSWORD=rootaa
+      - MONGODB_CFG_PRIMARY_HOST=mongodb-cfg-p
+      - MONGODB_REPLICA_SET_KEY=replicasetkey123
+      - MONGODB_CFG_REPLICA_SET_NAME=cfgreplicaset
+    ports:
+      - "27017:27017"
+    networks:
+      - local-dev
+
+  mongodb-shard0-p:
+    image: docker.io/bitnami/mongodb-sharded:5.0
+    environment:
+      - MONGODB_ADVERTISED_HOSTNAME=mongodb-shard0-p
+      - MONGODB_SHARDING_MODE=shardsvr
+      - MONGODB_MONGOS_HOST=mongodb-sharded
+      - MONGODB_ROOT_PASSWORD=rootaa
+      - MONGODB_REPLICA_SET_MODE=primary
+      - MONGODB_REPLICA_SET_KEY=replicasetkey123
+      - MONGODB_REPLICA_SET_NAME=shard0
+    networks:
+      - local-dev
+
+  mongodb-shard0-s:
+    image: docker.io/bitnami/mongodb-sharded:5.0
+    depends_on:
+      - mongodb-shard0-p
+    environment:
+      - MONGODB_ADVERTISED_HOSTNAME=mongodb-shard0-s
+      - MONGODB_SHARDING_MODE=shardsvr
+      - MONGODB_MONGOS_HOST=mongodb-sharded
+      - MONGODB_REPLICA_SET_MODE=secondary
+      - MONGODB_REPLICA_SET_KEY=replicasetkey123
+      - MONGODB_REPLICA_SET_NAME=shard0
+      - MONGODB_INITIAL_PRIMARY_HOST=mongodb-shard0-p
+      - MONGODB_INITIAL_PRIMARY_ROOT_PASSWORD=rootaa
+    networks:
+      - local-dev
+
+  mongodb-cfg-p:
+    image: docker.io/bitnami/mongodb-sharded:5.0
+    environment:
+      - MONGODB_ADVERTISED_HOSTNAME=mongodb-cfg-p
+      - MONGODB_SHARDING_MODE=configsvr
+      - MONGODB_ROOT_PASSWORD=rootaa
+      - MONGODB_REPLICA_SET_MODE=primary
+      - MONGODB_REPLICA_SET_KEY=replicasetkey123
+      - MONGODB_REPLICA_SET_NAME=cfgreplicaset
+    networks:
+      - local-dev
+  
+  mongodb-cfg-s:
+    image: docker.io/bitnami/mongodb-sharded:5.0
+    depends_on:
+      - mongodb-cfg-p
+    environment:
+      - MONGODB_ADVERTISED_HOSTNAME=mongodb-cfg-s
+      - MONGODB_SHARDING_MODE=configsvr
+      - MONGODB_REPLICA_SET_NAME=cfgreplicaset
+      - MONGODB_REPLICA_SET_KEY=replicasetkey123
+      - MONGODB_REPLICA_SET_MODE=secondary
+      - MONGODB_INITIAL_PRIMARY_HOST=mongodb-cfg-p
+      - MONGODB_INITIAL_PRIMARY_ROOT_PASSWORD=rootaa
+    networks:
+      - local-dev
+
+networks:
+  local-dev:
+    external: true
