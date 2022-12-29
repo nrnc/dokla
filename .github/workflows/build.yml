@@ -57,16 +57,17 @@ jobs:
           DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
         run: |
           docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-      - name: docker_build
+      - name: docker build and compose up
         id: docker_build
         env:
           TAG: ${{ steps.extract_tag.outputs.BUILD_TAG }}
         run: |
-          docker build -t ${{secrets.DOCKER_USER}}/$SERVICE:$TAG .
+          sh run.sh
 
       - name: Push Docker image To docker hub
         id: image-push
         env:
           TAG: ${{ steps.extract_tag.outputs.BUILD_TAG }}
         run: |
+          docker tag ${{secrets.DOCKER_USER}}/$SERVICE:latest ${{secrets.DOCKER_USER}}/$SERVICE:$TAG
           docker push ${{secrets.DOCKER_USER}}/$SERVICE:$TAG
