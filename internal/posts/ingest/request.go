@@ -66,18 +66,13 @@ func ExtractPathParams(r *http.Request) (*PathParams, error) {
 	}, nil
 }
 
-func GetRequest(req *http.Request) (*Request, error) {
-	pp, err := ExtractPathParams(req)
-
-	if err != nil {
-		return nil, err
-	}
+func GetRequest(req *http.Request, pp *PathParams) (*Request, error) {
 
 	request := NewRequest()
 	request.App = pp.App
 	request.Tenant = pp.Tenant
 	request.Source = pp.Source
-	err = json.NewDecoder(req.Body).Decode(request)
+	err := json.NewDecoder(req.Body).Decode(request)
 	if err != nil {
 		return nil, err
 	}

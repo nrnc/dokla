@@ -11,7 +11,14 @@ func decoder(
 	req *http.Request,
 ) (interface{}, error) {
 
-	request, err := GetRequest(req)
+	pp, err := ExtractPathParams(req)
+
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := AdaptorMap[pp.Source](req, pp)
+
 	if err != nil {
 		return nil, err
 	}

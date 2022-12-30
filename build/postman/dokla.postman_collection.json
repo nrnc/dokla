@@ -26,7 +26,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\" : \"narendra\",\n    \"content\":\"this project is so good, your services are helping us a lot\",\n    \"title\" : \"Appreciation post\",\n    \"post_id\":\"233\"\n}",
+					"raw": "{\n    \"name\" : \"narendra\",\n    \"content\":\"this project is so good, your services are helping us a lot\",\n    \"title\" : \"Appreciation post\",\n    \"post_id\":\"233\",\n    \"meta\":{\n        \"app_version\":\"v1.1.2\",\n        \"device\" :\"Android\",\n        \"location\":\"Vizag\",\n        \"language\": \"English\"\n    }\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -34,14 +34,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:9090/playstore/enterpret/app1/posts",
+					"raw": "http://localhost:9090/default/enterpret/app1/posts",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "9090",
 					"path": [
-						"playstore",
+						"default",
 						"enterpret",
 						"app1",
 						"posts"

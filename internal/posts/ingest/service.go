@@ -17,13 +17,15 @@ type (
 )
 
 func (s *service) Ingest(ctx context.Context, req *Request) (*Response, error) {
+
 	r := Response{}
-	s.logger.Info("fetching the posts")
+	s.logger.Info("ingesting the posts")
 	ir, err := s.repo.InsertOne(ctx, req)
 	if err != nil {
 		return nil, err
 	}
 	r.Id = ir
+
 	return &r, nil
 }
 
