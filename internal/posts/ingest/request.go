@@ -20,11 +20,19 @@ type (
 		Avatar     string `json:"avatar,omitempty" bson:"avatar,omitempty"`
 		PostId     string `json:"post_id,omitempty" bson:"post_id,omitempty"`
 		PathParams `json:"params,omitempty" bson:"inline"`
+		Meta       map[string]interface{} `json:"meta" bson:"meta,omitempty"`
 	}
 	PathParams struct {
 		App    string `json:"app,omitempty" bson:"app,omitempty"`
 		Tenant string `json:"tenant,omitempty" bson:"tenant,omitempty"`
 		Source string `json:"source,omitempty" bson:"source,omitempty"`
+	}
+
+	Meta struct {
+		AppVersion string `json:"app_version" bson:"app_version,omitempty"`
+		Device     string `json:"Device" bson:"device,omitempty"`
+		Location   string `json:"location" bson:"location,omitempty"`
+		Language   string `json:"language" bson:"language,omitempty"`
 	}
 )
 
@@ -32,6 +40,14 @@ func NewRequest() *Request {
 	return &Request{
 		CreatedAt: time.Now().Format(time.RFC3339),
 	}
+}
+
+type PathParamsSetter interface {
+	SetPathParams(*PathParams)
+}
+
+func SetPathParams(r PathParamsSetter, pathParams *PathParams) {
+	r.SetPathParams(pathParams)
 }
 
 func ExtractPathParams(r *http.Request) (*PathParams, error) {
@@ -58,18 +74,13 @@ func ExtractPathParams(r *http.Request) (*PathParams, error) {
 	}, nil
 }
 
-func GetRequest(req *http.Request) (*Request, error) {
-	pp, err := ExtractPathParams(req)
-
-	if err != nil {
-		return nil, err
-	}
+func GetRequest(req *http.Request, pp *PathParams) (*Request, error) {
 
 	request := NewRequest()
 	request.App = pp.App
 	request.Tenant = pp.Tenant
 	request.Source = pp.Source
-	err = json.NewDecoder(req.Body).Decode(request)
+	err := json.NewDecoder(req.Body).Decode(request)
 	if err != nil {
 		return nil, err
 	}

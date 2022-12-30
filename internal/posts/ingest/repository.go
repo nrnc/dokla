@@ -24,9 +24,10 @@ func (m *mongoRepo) InsertOne(ctx context.Context, request interface{}) (interfa
 
 	ireq := request.(*Request)
 	app := ireq.App
+	source := ireq.Source
 	tenant := ireq.Tenant
 
-	r, err := m.client.Database(tenant).Collection(app).InsertOne(ctx, ireq)
+	r, err := m.client.Database(tenant).Collection(source+app).InsertOne(ctx, ireq)
 
 	if err != nil {
 		return nil, err

@@ -26,7 +26,51 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\" : \"narendra\",\n    \"content\":\"this project is so good, your services are helping us a lot\",\n    \"title\" : \"Appreciation post\",\n    \"post_id\":\"233\"\n}",
+					"raw": "{\n    \"name\" : \"narendra\",\n    \"content\":\"this project is so good, your services are helping us a lot\",\n    \"title\" : \"Appreciation post\",\n    \"post_id\":\"233\",\n    \"meta\":{\n        \"app_version\":\"v1.1.2\",\n        \"device\" :\"Android\",\n        \"location\":\"Vizag\",\n        \"language\": \"English\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9090/default/enterpret/app1/posts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"default",
+						"enterpret",
+						"app1",
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "playstore",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function() {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\" : \"narendra\",\n    \"review\":\"this app is so good, your services are helping us a lot\",\n    \"title\" : \"Appreciation post\",\n    \"review_id\":\"233\",\n    \"created_at\": \"2022-12-30\",\n    \"meta\":{\n        \"app_version\":\"v1.1.2\",\n        \"device\" :\"Android\",\n        \"location\":\"Vizag\",\n        \"language\": \"English\"\n    }\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -42,6 +86,94 @@
 					"port": "9090",
 					"path": [
 						"playstore",
+						"enterpret",
+						"app1",
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "twitter",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function() {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\" : \"narendra\",\n    \"tweet\":\"this app is so good, your services are helping us a lot\",\n    \"title\" : \"Appreciation post\",\n    \"tweet_id\":\"233\",\n    \"created_at\": \"30-12-2022\",\n    \"meta\":{\n        \"app_version\":\"v1.1.2\",\n        \"device\" :\"Android\",\n        \"location\":\"Vizag\",\n        \"language\": \"English\",\n        \"trending_topics\" : \"cricket\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9090/twitter/enterpret/app1/posts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"twitter",
+						"enterpret",
+						"app1",
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "discourse",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function() {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\" : \"narendra\",\n    \"blurb\":\"this app is so good, your services are helping us a lot\",\n    \"topic_title_headline\" : \"Appreciation post\",\n    \"post_number\":\"233\",\n    \"created_at\": \"30-12-2022\",\n    \"meta\":{\n        \"app_version\":\"v1.1.2\",\n        \"device\" :\"Android\",\n        \"location\":\"Vizag\",\n        \"language\": \"English\",\n        \"discourse_specific_meta\":\"metaaaaaaa\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9090/discourse/enterpret/app1/posts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"discourse",
 						"enterpret",
 						"app1",
 						"posts"
