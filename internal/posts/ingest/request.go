@@ -20,11 +20,19 @@ type (
 		Avatar     string `json:"avatar,omitempty" bson:"avatar,omitempty"`
 		PostId     string `json:"post_id,omitempty" bson:"post_id,omitempty"`
 		PathParams `json:"params,omitempty" bson:"inline"`
+		Meta       map[string]interface{} `json:"meta" bson:"meta,omitempty"`
 	}
 	PathParams struct {
 		App    string `json:"app,omitempty" bson:"app,omitempty"`
 		Tenant string `json:"tenant,omitempty" bson:"tenant,omitempty"`
 		Source string `json:"source,omitempty" bson:"source,omitempty"`
+	}
+
+	Meta struct {
+		AppVersion string `json:"app_version" bson:"app_version,omitempty"`
+		Device     string `json:"Device" bson:"device,omitempty"`
+		Location   string `json:"location" bson:"location,omitempty"`
+		Language   string `json:"language" bson:"language,omitempty"`
 	}
 )
 
