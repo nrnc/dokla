@@ -42,6 +42,14 @@ func NewRequest() *Request {
 	}
 }
 
+type PathParamsSetter interface {
+	SetPathParams(*PathParams)
+}
+
+func SetPathParams(r PathParamsSetter, pathParams *PathParams) {
+	r.SetPathParams(pathParams)
+}
+
 func ExtractPathParams(r *http.Request) (*PathParams, error) {
 	// Read Mux's Vars
 	vars := basehttp.Parameters(r)
