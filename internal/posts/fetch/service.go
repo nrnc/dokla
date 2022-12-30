@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/unbxd/go-base/utils/log"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type (
@@ -12,6 +13,7 @@ type (
 	}
 	service struct {
 		logger log.Logger
+		mc     *mongo.Client
 	}
 )
 
@@ -24,9 +26,11 @@ func (s *service) FetchPosts(ctx context.Context, req *Request) (*Response, erro
 // NewService returns default implementation of Service interface
 func NewService(
 	logger log.Logger,
+	mc *mongo.Client,
 ) (Service, error) {
 	a := service{
 		logger: logger,
+		mc:     mc,
 	}
 
 	return &a, nil

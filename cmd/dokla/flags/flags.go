@@ -110,7 +110,7 @@ var (
 			Name:        "mongo.conn",
 			Value:       "mongodb://mongodb-sharded:27017/?authSource=admin",
 			Usage:       "set the connection string for mongodb",
-			DefaultText: "--mongo.conn=mongodb://mongodb-sharded:27017?authSource=admin",
+			DefaultText: "--mongo.conn=mongodb://mongodb-sharded:27017/?authSource=admin",
 			EnvVars:     []string{"DOKLA_MONGO_CONN"},
 			Destination: &DbConn,
 		},

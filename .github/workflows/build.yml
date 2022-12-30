@@ -64,6 +64,21 @@ jobs:
         run: |
           sh run.sh
 
+      - name: wait for server to comeup
+        id: wait-for-it
+        run: |
+          chmod 777 ./build/scripts/wait-for-it.sh
+          ./build/scripts/wait-for-it.sh localhost:9090
+      
+      - name: Run tests
+        id: run_tests
+        run: |
+          newman run ./build/postman/dokla.postman_collection.json
+
+      - name: Setup tmate session
+        if: ${{ failure() }}
+        uses: mxschmitt/action-tmate@v3
+
       - name: Push Docker image To docker hub
         id: image-push
         env:

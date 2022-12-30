@@ -15,7 +15,7 @@ services:
     networks:
       - local-dev
   mongodb-sharded:
-    image: docker.io/bitnami/mongodb-sharded:5.0
+    image: docker.io/bitnami/mongodb-sharded:4.4.14
     environment:
       - MONGODB_ADVERTISED_HOSTNAME=mongodb-sharded
       - MONGODB_SHARDING_MODE=mongos
@@ -29,7 +29,7 @@ services:
       - local-dev
 
   mongodb-shard0-p:
-    image: docker.io/bitnami/mongodb-sharded:5.0
+    image: docker.io/bitnami/mongodb-sharded:4.4.14
     environment:
       - MONGODB_ADVERTISED_HOSTNAME=mongodb-shard0-p
       - MONGODB_SHARDING_MODE=shardsvr
@@ -42,7 +42,7 @@ services:
       - local-dev
 
   mongodb-shard0-s:
-    image: docker.io/bitnami/mongodb-sharded:5.0
+    image: docker.io/bitnami/mongodb-sharded:4.4.14
     depends_on:
       - mongodb-shard0-p
     environment:
@@ -58,7 +58,7 @@ services:
       - local-dev
 
   mongodb-cfg-p:
-    image: docker.io/bitnami/mongodb-sharded:5.0
+    image: docker.io/bitnami/mongodb-sharded:4.4.14
     environment:
       - MONGODB_ADVERTISED_HOSTNAME=mongodb-cfg-p
       - MONGODB_SHARDING_MODE=configsvr
@@ -70,7 +70,7 @@ services:
       - local-dev
   
   mongodb-cfg-s:
-    image: docker.io/bitnami/mongodb-sharded:5.0
+    image: docker.io/bitnami/mongodb-sharded:4.4.14
     depends_on:
       - mongodb-cfg-p
     environment:

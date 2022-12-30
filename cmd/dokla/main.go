@@ -8,6 +8,7 @@ import (
 func main() {
 	tp, err := NewDokla(
 		withLogger(),
+		withMongoClient(),
 		withHttpTransport(),
 		withMonitorHandler(),
 		withFetchHandler(),
