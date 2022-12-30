@@ -33,6 +33,18 @@ type (
 		PathParams `json:"params,omitempty"`
 		Meta       map[string]interface{} `json:"meta,omitempty"`
 	}
+
+	Discourse struct {
+		Name               string `json:"name,omitempty"`
+		Username           string `json:"username,omitempty"`
+		Blurb              string `json:"blurb,omitempty"`
+		TopicTitleHeadline string `json:"topic_title_headline,omitempty"`
+		CreatedAt          string `json:"created_at,omitempty"` //02-01-2006 same as twitter
+		Avatar             string `json:"avatar,omitempty"`
+		PostNumber         string `json:"post_number,omitempty"`
+		PathParams         `json:"params,omitempty"`
+		Meta               map[string]interface{} `json:"meta,omitempty"`
+	}
 )
 
 type Adaptor func(*http.Request, *PathParams) (*Request, error)
@@ -54,6 +66,12 @@ func (t *Twitter) SetPathParams(pathParams *PathParams) {
 	t.App = pathParams.App
 	t.Source = pathParams.Source
 	t.Tenant = pathParams.Tenant
+}
+
+func (d *Discourse) SetPathParams(pathParams *PathParams) {
+	d.App = pathParams.App
+	d.Source = pathParams.Source
+	d.Tenant = pathParams.Tenant
 }
 
 func PlayStoreAdaptor(req *http.Request, pathParams *PathParams) (*Request, error) {
@@ -143,7 +161,45 @@ func TwitterAdaptor(req *http.Request, pathParams *PathParams) (*Request, error)
 }
 
 func DiscourseAdaptor(req *http.Request, pathParams *PathParams) (*Request, error) {
-	return nil, nil
+	orequest := &Discourse{}
+
+	orequest.SetPathParams(pathParams)
+
+	err := json.NewDecoder(req.Body).Decode(orequest)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if orequest.PostNumber == "" {
+		return nil, errors.New("tweet must contain tweet id")
+	}
+
+	if orequest.CreatedAt == "" {
+		orequest.CreatedAt = time.Now().Format(time.RFC3339)
+	} else {
+		t, err := time.Parse("02-01-2006", orequest.CreatedAt)
+		if err != nil {
+			orequest.CreatedAt = time.Now().Format(time.RFC3339)
+		} else {
+			orequest.CreatedAt = t.Format(time.RFC3339)
+		}
+	}
+
+	nrequest := &Request{}
+	nrequest.App = orequest.App
+	nrequest.Tenant = orequest.Tenant
+	nrequest.Source = orequest.Source
+	nrequest.Name = orequest.Name
+	nrequest.Username = orequest.Username
+	nrequest.Avatar = orequest.Avatar
+	nrequest.Content = orequest.Blurb
+	nrequest.Meta = orequest.Meta
+	nrequest.PostId = orequest.PostNumber
+	nrequest.CreatedAt = orequest.CreatedAt
+	nrequest.Title = orequest.TopicTitleHeadline
+
+	return nrequest, nil
 }
 
 func DefaultAdaptor(req *http.Request, pathParams *PathParams) (*Request, error) {
