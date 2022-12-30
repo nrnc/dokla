@@ -10,6 +10,7 @@ import (
 	"github.com/unbxd/go-base/kit/transport/http"
 	"github.com/unbxd/go-base/utils/log"
 	"github.com/urfave/cli/v2"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type (
@@ -18,8 +19,9 @@ type (
 
 	Dokla struct {
 		*cli.App
-		logger log.Logger
-		httpTr *http.Transport
+		logger      log.Logger
+		httpTr      *http.Transport
+		mongoClient *mongo.Client
 	}
 )
 
@@ -90,6 +92,7 @@ func NewDokla(options ...Option) (*Dokla, error) {
 		},
 
 		Action: func(cx *cli.Context) (err error) {
+
 			err = dokla.Open()
 			if err != nil {
 				return cli.Exit(

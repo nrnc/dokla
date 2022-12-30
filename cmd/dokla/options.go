@@ -3,7 +3,9 @@ package main
 import (
 	"github.com/nrnc/dokla/cmd/dokla/flags"
 	"github.com/nrnc/dokla/internal/posts/fetch"
+	"github.com/nrnc/dokla/internal/posts/ingest"
 	"github.com/nrnc/dokla/internal/posts/monitor"
+	"github.com/nrnc/dokla/internal/posts/utils"
 	"github.com/pkg/errors"
 	"github.com/unbxd/go-base/kit/transport/http"
 	"github.com/unbxd/go-base/utils/log"
@@ -22,6 +24,18 @@ func withLogger() Option {
 			return errors.Wrap(err, "create logger failed")
 		}
 		dokla.logger = logger
+		return
+	}
+}
+
+func withMongoClient() Option {
+	return func(dokla *Dokla) (err error) {
+		client, err := utils.MongoClient(flags.DbConn, dokla.logger)
+
+		if err != nil {
+			return errors.Wrap(err, "create mongo connection failed")
+		}
+		dokla.mongoClient = client
 		return
 	}
 }
@@ -59,6 +73,12 @@ func withMonitorHandler() Option {
 
 func withIngestHandler() Option {
 	return func(d *Dokla) error {
+		ih := ingest.NewIngestHandler(
+			ingest.HandlerWithLogger(d.logger),
+		)
+		mr := ingest.NewMongoIngestRepo(d.mongoClient)
+		ingest.Bind(d.httpTr, ih.HTTPHandler(mr))
+
 		return nil
 	}
 }
@@ -68,7 +88,7 @@ func withFetchHandler() Option {
 		fh := fetch.NewFetchHandler(
 			fetch.HandlerWithLogger(d.logger),
 		)
-		fetch.Bind(d.httpTr, fh.HTTPHandler())
+		fetch.Bind(d.httpTr, fh.HTTPHandler(d.mongoClient))
 
 		return nil
 	}
