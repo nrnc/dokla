@@ -95,6 +95,50 @@
 			"response": []
 		},
 		{
+			"name": "twitter",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function() {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\" : \"narendra\",\n    \"tweet\":\"this app is so good, your services are helping us a lot\",\n    \"title\" : \"Appreciation post\",\n    \"tweet_id\":\"233\",\n    \"created_at\": \"30-12-2022\",\n    \"meta\":{\n        \"app_version\":\"v1.1.2\",\n        \"device\" :\"Android\",\n        \"location\":\"Vizag\",\n        \"language\": \"English\",\n        \"trending_topics\" : \"cricket\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9090/twitter/enterpret/app1/posts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"twitter",
+						"enterpret",
+						"app1",
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "monitor",
 			"event": [
 				{
