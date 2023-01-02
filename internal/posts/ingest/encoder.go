@@ -3,7 +3,6 @@ package ingest
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	nethttp "net/http"
 
@@ -24,24 +23,14 @@ func encoder(ctx context.Context, w http.ResponseWriter, res interface{}) error 
 func errorEncoder(_ context.Context, err error, w nethttp.ResponseWriter) {
 
 	w.Header().Set("Content-Type", "application/json")
-	var code int
-	var message string
 
-	if ferr, ok := err.(*errors.FetchError); ok {
-		code = ferr.ErrCode
-		message = ferr.ErrMsg
-		w.WriteHeader(code)
-	} else {
-		// always set to internal server error
-		fmt.Println("error", err)
-		code = nethttp.StatusInternalServerError
-		message = errors.DEFAULT_ERROR
-		w.WriteHeader(code)
-	}
+	// always set to internal server error
+	code := nethttp.StatusInternalServerError
+	message := errors.DEFAULT_ERROR
+	w.WriteHeader(code)
 
 	errRes := &Response{
 		Error: &Error{message, int32(code)},
 	}
 	json.NewEncoder(w).Encode(errRes)
-
 }

@@ -76,7 +76,7 @@ func withIngestHandler() Option {
 		ih := ingest.NewIngestHandler(
 			ingest.HandlerWithLogger(d.logger),
 		)
-		mr := ingest.NewMongoIngestRepo(d.mongoClient)
+		mr := ingest.NewMongoIngestRepo(d.mongoClient, d.logger)
 		ingest.Bind(d.httpTr, ih.HTTPHandler(mr))
 
 		return nil
@@ -88,7 +88,8 @@ func withFetchHandler() Option {
 		fh := fetch.NewFetchHandler(
 			fetch.HandlerWithLogger(d.logger),
 		)
-		fetch.Bind(d.httpTr, fh.HTTPHandler(d.mongoClient))
+		mr := fetch.NewMongoFetchRepo(d.mongoClient, d.logger)
+		fetch.Bind(d.httpTr, fh.HTTPHandler(mr))
 
 		return nil
 	}

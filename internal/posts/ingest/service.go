@@ -18,13 +18,14 @@ type (
 
 func (s *service) Ingest(ctx context.Context, req *Request) (*Response, error) {
 
-	r := Response{}
 	s.logger.Info("ingesting the posts")
 	ir, err := s.repo.InsertOne(ctx, req)
 	if err != nil {
+		s.logger.Error("failed with the following error" + err.Error())
 		return nil, err
 	}
-	r.Id = ir
+
+	r := Response{Id: ir, Success: true}
 
 	return &r, nil
 }
