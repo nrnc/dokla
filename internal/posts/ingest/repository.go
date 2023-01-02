@@ -2,8 +2,12 @@ package ingest
 
 import (
 	"context"
+	"time"
 
+	"github.com/nrnc/dokla/cmd/dokla/flags"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type Repository interface {
@@ -24,13 +28,20 @@ func (m *mongoRepo) InsertOne(ctx context.Context, request interface{}) (interfa
 
 	ireq := request.(*Request)
 	app := ireq.App
-	source := ireq.Source
 	tenant := ireq.Tenant
 
-	r, err := m.client.Database(tenant).Collection(source+app).InsertOne(ctx, ireq)
+	opts := options.Update().SetUpsert(true)
+
+	filter := bson.M{"post_id": ireq.PostId}
+	updatePost := bson.M{"$set": ireq}
+
+	ctx, cancel := context.WithTimeout(ctx, time.Duration(flags.DbWriteTimeout)*time.Millisecond)
+	defer cancel()
+
+	r, err := m.client.Database(tenant).Collection(app).UpdateOne(ctx, filter, updatePost, opts)
 
 	if err != nil {
 		return nil, err
 	}
-	return r.InsertedID, err
+	return r.UpsertedID, err
 }
