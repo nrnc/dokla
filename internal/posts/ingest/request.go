@@ -42,12 +42,29 @@ func NewRequest() *Request {
 	}
 }
 
-type PathParamsSetter interface {
-	SetPathParams(*PathParams)
+func (r *Request) SetPathParams(pathParams *PathParams) {
+	r.App = pathParams.App
+	r.Source = pathParams.Source
+	r.Tenant = pathParams.Tenant
 }
 
-func SetPathParams(r PathParamsSetter, pathParams *PathParams) {
-	r.SetPathParams(pathParams)
+func (r *Request) Decode(req *http.Request) error {
+	err := json.NewDecoder(req.Body).Decode(r)
+	return err
+}
+
+func (r *Request) SetTime() {
+	if r.CreatedAt == "" {
+		r.CreatedAt = time.Now().Format(time.RFC3339)
+	}
+}
+
+func (r *Request) Adapt() *Request {
+	return r
+}
+
+func (r *Request) IsValid() bool {
+	return r.PostId != ""
 }
 
 func ExtractPathParams(r *http.Request) (*PathParams, error) {
@@ -72,18 +89,4 @@ func ExtractPathParams(r *http.Request) (*PathParams, error) {
 	return &PathParams{
 		app, tenant, source,
 	}, nil
-}
-
-func GetRequest(req *http.Request, pp *PathParams) (*Request, error) {
-
-	request := NewRequest()
-	request.App = pp.App
-	request.Tenant = pp.Tenant
-	request.Source = pp.Source
-	err := json.NewDecoder(req.Body).Decode(request)
-	if err != nil {
-		return nil, err
-	}
-
-	return request, nil
 }
