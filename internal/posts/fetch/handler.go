@@ -4,7 +4,6 @@ import (
 	nethttp "net/http"
 
 	"github.com/unbxd/go-base/kit/transport/http"
-	"go.mongodb.org/mongo-driver/mongo"
 
 	"github.com/unbxd/go-base/utils/log"
 )
@@ -38,16 +37,16 @@ func NewFetchHandler(opts ...HandlerOption) *FetchHandler {
 func Bind(transport *http.Transport, http_handler nethttp.Handler) {
 	transport.Mux().Handler(
 		nethttp.MethodGet,
-		"/:app/posts",
+		"/:tenant/:app/posts",
 		http_handler,
 	)
 }
 
 // fetchHttpHandler creates http.Handler init with fetchposts endpoint
-func (fh *FetchHandler) fetchHttpHandler(mc *mongo.Client) http.Handler {
+func (fh *FetchHandler) fetchHttpHandler(repo Repository) http.Handler {
 	svc, _ := NewService(
 		fh.logger,
-		mc,
+		repo,
 	)
 	ep := newFetchPostsEndpoint(svc)
 	return http.Handler(ep)
@@ -55,7 +54,7 @@ func (fh *FetchHandler) fetchHttpHandler(mc *mongo.Client) http.Handler {
 
 // HTTPHandler returns an http handler with options and fetch endpoint
 func (fh *FetchHandler) HTTPHandler(
-	mc *mongo.Client,
+	repo Repository,
 	opts ...http.HandlerOption) nethttp.Handler {
 	options := append(
 		[]http.HandlerOption{
@@ -66,6 +65,6 @@ func (fh *FetchHandler) HTTPHandler(
 		}, opts...,
 	)
 	return http.NewHandler(
-		fh.fetchHttpHandler(mc),
+		fh.fetchHttpHandler(repo),
 		options...)
 }

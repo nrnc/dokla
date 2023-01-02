@@ -26,7 +26,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\" : \"narendra\",\n    \"content\":\"this project is so good, your services are helping us a lot\",\n    \"title\" : \"Appreciation post\",\n    \"post_id\":\"233\",\n    \"meta\":{\n        \"app_version\":\"v1.1.2\",\n        \"device\" :\"Android\",\n        \"location\":\"Vizag\",\n        \"language\": \"English\"\n    }\n}",
+					"raw": "{\n    \"name\" : \"narendra\",\n    \"content\":\"this project is so good, your services are helping us a lot\",\n    \"title\" : \"Appreciation post\",\n    \"post_id\":\"2334\",\n    \"meta\":{\n        \"app_version\":\"v1.1.2\",\n        \"device\" :\"Android\",\n        \"location\":\"Vizag\",\n        \"language\": \"English\"\n    }\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -70,7 +70,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\" : \"narendra\",\n    \"review\":\"this app is so good, your services are helping us a lot\",\n    \"title\" : \"Appreciation post\",\n    \"review_id\":\"233\",\n    \"created_at\": \"2022-12-30\",\n    \"meta\":{\n        \"app_version\":\"v1.1.2\",\n        \"device\" :\"Android\",\n        \"location\":\"Vizag\",\n        \"language\": \"English\"\n    }\n}",
+					"raw": "{\n    \"name\" : \"narendra\",\n    \"review\":\"this app is so good, your services are helping us a lot\",\n    \"title\" : \"Appreciation post\",\n    \"review_id\":\"2335\",\n    \"created_at\": \"2022-12-30\",\n    \"meta\":{\n        \"app_version\":\"v1.1.2\",\n        \"device\" :\"Android\",\n        \"location\":\"Vizag\",\n        \"language\": \"English\"\n    }\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -114,7 +114,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\" : \"narendra\",\n    \"tweet\":\"this app is so good, your services are helping us a lot\",\n    \"title\" : \"Appreciation post\",\n    \"tweet_id\":\"233\",\n    \"created_at\": \"30-12-2022\",\n    \"meta\":{\n        \"app_version\":\"v1.1.2\",\n        \"device\" :\"Android\",\n        \"location\":\"Vizag\",\n        \"language\": \"English\",\n        \"trending_topics\" : \"cricket\"\n    }\n}",
+					"raw": "{\n    \"name\" : \"narendra\",\n    \"tweet\":\"this app is so good, your services are helping us a lot\",\n    \"title\" : \"Appreciation post\",\n    \"tweet_id\":\"2336\",\n    \"created_at\": \"30-12-2022\",\n    \"meta\":{\n        \"app_version\":\"v1.1.2\",\n        \"device\" :\"Android\",\n        \"location\":\"Vizag\",\n        \"language\": \"English\",\n        \"trending_topics\" : \"cricket\"\n    }\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -158,7 +158,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\" : \"narendra\",\n    \"blurb\":\"this app is so good, your services are helping us a lot\",\n    \"topic_title_headline\" : \"Appreciation post\",\n    \"post_number\":\"233\",\n    \"created_at\": \"30-12-2022\",\n    \"meta\":{\n        \"app_version\":\"v1.1.2\",\n        \"device\" :\"Android\",\n        \"location\":\"Vizag\",\n        \"language\": \"English\",\n        \"discourse_specific_meta\":\"metaaaaaaa\"\n    }\n}",
+					"raw": "{\n    \"name\" : \"narendra\",\n    \"blurb\":\"this app is so good, your services are helping us a lot\",\n    \"topic_title_headline\" : \"Appreciation post\",\n    \"post_number\":\"23344444444\",\n    \"created_at\": \"05-12-2022\",\n    \"meta\":{\n        \"app_version\":\"v1.1.2\",\n        \"device\" :\"Android\",\n        \"location\":\"Vizag\",\n        \"language\": \"English\",\n        \"discourse_specific_meta\":\"metaaaaaaa\"\n    }\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -209,6 +209,90 @@
 					"port": "9090",
 					"path": [
 						"monitor"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getbyid",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function() {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9090/enterpret/app1/posts?post_id=2336",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"enterpret",
+						"app1",
+						"posts"
+					],
+					"query": [
+						{
+							"key": "post_id",
+							"value": "2336"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getbyduration",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function() {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9090/enterpret/app1/posts?after=29-12-2022&before=03-01-2023",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"enterpret",
+						"app1",
+						"posts"
+					],
+					"query": [
+						{
+							"key": "after",
+							"value": "29-12-2022"
+						},
+						{
+							"key": "before",
+							"value": "03-01-2023"
+						}
 					]
 				}
 			},

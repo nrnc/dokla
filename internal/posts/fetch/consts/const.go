@@ -1,5 +1,6 @@
 package consts
 
 const (
-	APP = "app"
+	APP    = "app"
+	TENANT = "tenant"
 )
