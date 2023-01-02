@@ -3,7 +3,6 @@ package ingest
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	nethttp "net/http"
 
@@ -33,7 +32,6 @@ func errorEncoder(_ context.Context, err error, w nethttp.ResponseWriter) {
 		w.WriteHeader(code)
 	} else {
 		// always set to internal server error
-		fmt.Println("error", err)
 		code = nethttp.StatusInternalServerError
 		message = errors.DEFAULT_ERROR
 		w.WriteHeader(code)
@@ -43,5 +41,4 @@ func errorEncoder(_ context.Context, err error, w nethttp.ResponseWriter) {
 		Error: &Error{message, int32(code)},
 	}
 	json.NewEncoder(w).Encode(errRes)
-
 }

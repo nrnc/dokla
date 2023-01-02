@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/nrnc/dokla/cmd/dokla/flags"
+	"github.com/unbxd/go-base/utils/log"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -15,11 +16,13 @@ type Repository interface {
 }
 
 type mongoRepo struct {
+	logger log.Logger
 	client *mongo.Client
 }
 
-func NewMongoIngestRepo(client *mongo.Client) *mongoRepo {
+func NewMongoIngestRepo(client *mongo.Client, logger log.Logger) *mongoRepo {
 	return &mongoRepo{
+		logger: logger,
 		client: client,
 	}
 }
@@ -41,7 +44,9 @@ func (m *mongoRepo) InsertOne(ctx context.Context, request interface{}) (interfa
 	r, err := m.client.Database(tenant).Collection(app).UpdateOne(ctx, filter, updatePost, opts)
 
 	if err != nil {
+		m.logger.Error("database insertion failed with the error: " + err.Error())
 		return nil, err
 	}
-	return r.UpsertedID, err
+
+	return r.UpsertedID, nil
 }
