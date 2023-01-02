@@ -4,6 +4,8 @@ services:
   dokla:
     image: nchukka/dokla:latest
     restart: always
+    environment:
+      - DOKLA_MONGO_CONN=mongodb://mongodb-sharded:27017/?authSource=admin
     depends_on:
       - mongodb-sharded
       - mongodb-shard0-p

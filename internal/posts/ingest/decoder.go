@@ -17,10 +17,10 @@ func decoder(
 		return nil, err
 	}
 
-	request, err := AdaptorMap[pp.Source](req, pp)
+	r, err := BuildRequest(req, pp)
 
 	if err != nil {
 		return nil, err
 	}
-	return request, nil
+	return r, nil
 }

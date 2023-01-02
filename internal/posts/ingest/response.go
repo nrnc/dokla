@@ -2,8 +2,9 @@ package ingest
 
 type (
 	Response struct {
-		Id    interface{} `json:"id,omitempty"`
-		Error *Error      `error:"error,omitempty"`
+		Success bool        `json:"success,omitempty"`
+		Id      interface{} `json:"id,omitempty"`
+		Error   *Error      `json:"error,omitempty"`
 	}
 	Error struct {
 		Msg  string `json:"msg,omitempty"`

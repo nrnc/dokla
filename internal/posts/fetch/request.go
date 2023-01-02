@@ -9,10 +9,11 @@ import (
 )
 
 type Request struct {
-	Id     string `json:"id"`
-	App    string `json:"app"`
-	After  string `json:"after"`
-	Before string `json:"before"`
+	Id     string
+	Tenant string
+	App    string
+	After  string
+	Before string
 }
 
 func GetRequest(req *http.Request) (*Request, error) {
@@ -21,11 +22,18 @@ func GetRequest(req *http.Request) (*Request, error) {
 	if !ok || app == "" {
 		return nil, errors.New("error extracting app name")
 	}
+	tenant, ok := vars[c.TENANT]
+
+	if !ok || tenant == "" {
+		return nil, errors.New("error extracting tenant")
+	}
+
 	qparams := req.URL.Query()
 
 	return &Request{
-		Id:     qparams.Get("id"),
+		Id:     qparams.Get("post_id"),
 		App:    app,
+		Tenant: tenant,
 		After:  qparams.Get("after"),
 		Before: qparams.Get("before"),
 	}, nil
