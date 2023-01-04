@@ -21,6 +21,11 @@ Push/Pull feed ingestion service
 - [ ] Fetch by duration supports only fewer cases, can be made much more robust
 - [ ] Batch insertion of feeds
 - [ ] Use kafka, for consuming messages from, instead of exposing an endpoint
+- [ ] Add helm charts for kubernetes deployment
+
+## Adding a new source
+- implement the [ReqBuilder](https://github.com/nrnc/dokla/blob/main/internal/posts/ingest/builder.go) interface eg: [playstore](https://github.com/nrnc/dokla/blob/main/internal/posts/ingest/playstore.go)
+- add the new source concrete struct which implements ReqBuilder [here](https://github.com/nrnc/dokla/blob/main/internal/posts/ingest/factory.go)
 
 
 
